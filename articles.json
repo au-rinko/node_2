@@ -1,0 +1,41 @@
+[
+    {
+      "id": 1,
+      "title": "International Day of Friendship",
+      "text": "July 30 is the United Nations International Day of Friendship. Read about the importance of friendship and find out why the UN decided to give it a special day.",
+      "date": 1722326126,
+      "author": "Alice Cooper",
+      "comments": [
+        {
+          "id": 1,
+          "articleId": 2,
+          "text": "Wow!",
+          "date": 1722333326,
+          "author": "John Smith"
+        },
+        {
+          "id": 2,
+          "articleId": 2,
+          "text": "Let's celebrate",
+          "date": 1722340526,
+          "author": "Freddie Adams"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "For a More Creative Brain Follow These 5 Steps",
+      "text": "Nearly all great ideas follow a similar creative process and this article explains how this process works. Understanding this is important because creative thinking is one of the most useful skills you can possess. Nearly every problem you face in work and in life can benefit from innovative solutions, lateral thinking, and creative ideas.",
+      "date": 1725166526,
+      "author": "James Clear",
+      "comments": [
+        {
+          "id": 1,
+          "articleId": 1,
+          "text": "That's great!",
+          "date": 1725177326,
+          "author": "James Cameron"
+        }
+      ]
+    }
+  ]

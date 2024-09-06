@@ -1,61 +1,30 @@
 const http = require('http');
+const fs = require('fs');
+const { parseUrl, parseBodyJson } = require('./parsers');
+const { hello, readAll, read, create, notFound } = require('./controllers');
 
 const hostname = '127.0.0.1';
 const port = 3000;
-const SERVER_SUCESS = 200;
 
 const handlers = {
-    '/sum': sum
+    '/': hello,
+    '/articles/readall': readAll,
+    '/articles/read': read,
+    '/articles/create': create
 };
 
-const server = http.createServer((req, res) => {
-    parseBodyJson(req, (err, payload) => {
-        const handler = getHandler(req.url);
-       
-        handler(req, res, payload, (err, result) => {
-            if(err) {
-                res.statusCode = err.code;
-                res.setHeader('Content-Type', 'application/json');
-                res.end( JSON.stringify(err) );
-                
-                return;
-            }
-
-            res.statusCode = SERVER_SUCESS;
-            res.setHeader('Content-Type', 'application/json');
-            res.end( JSON.stringify(result) );
-        });
-    });
-});
+const server = http.createServer(handler);
 
 server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
 
+function handler(req, res) {
+    const { url, params } = parseUrl(req.url);
+    const handler = getHandler(url);
+    handler(req, res, params);
+}
+
 function getHandler(url) {
     return handlers[url] || notFound;
-}
-
-function sum(req, res, payload, cb) {
-    const result = { c: payload.a + payload.b };
-
-    cb(null, result);
-}
-
-function notFound(req, req, payload, cb) {
-    cb({ code: 404, message: 'Not found' });
-}
-
-function parseBodyJson(req, cb) {
-    let body = [];
-
-    req.on('data', function(chunk) {
-        body.push(chunk);
-    }).on('end', function() {
-        body = Buffer.concat(body).toString();
-
-        let params = JSON.parse(body);
-
-        cb(null, params);
-    });
 }
