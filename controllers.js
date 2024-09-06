@@ -35,14 +35,14 @@ function create(req, res) {
     parseBodyJson(req, (err, result) => {
         if (err) {
             res.statusCode = err.code;
-            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
             res.end( JSON.stringify(err) );
     
             return;
         }
         
         res.statusCode = SERVER_SUCCESS;
-        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
         const obj = Object.assign({ id: array.length + 1}, result);
         array.push(obj);
         writeToFile(array);
@@ -54,14 +54,14 @@ function update(req, res, params) {
     parseBodyJson(req, (err, result) => {
         if (err) {
             res.statusCode = err.code;
-            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
             res.end( JSON.stringify(err) );
     
             return;
         }
         
         res.statusCode = SERVER_SUCCESS;
-        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
         console.log(params.id);
         array = array.map(item => item.id !== +params.id ? item: {
                     id: item.id,
@@ -80,11 +80,10 @@ function update(req, res, params) {
 function deleteArt(req, res, params) {
     res.statusCode = SERVER_SUCCESS;
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    console.log(params.id);
     if(+params.id > array.length){
         res.end(`There is no such article`);
     } else {
-        array = array.filter(item => item.id !== +params.id).map((item, index) => item.id = {
+        array = array.filter(item => item.id !== +params.id).map((item, index) => item = {
             id: index + 1,
             title: item.title,
             text: item.text,
@@ -101,19 +100,39 @@ function createComment(req, res, params) {
     parseBodyJson(req, (err, result) => {
         if (err) {
             res.statusCode = err.code;
-            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
             res.end( JSON.stringify(err) );
     
             return;
         }
         
         res.statusCode = SERVER_SUCCESS;
-        res.setHeader('Content-Type', 'application/json');
-        const obj = Object.assign({ id: array[+params.id - 1].comments.length + 1}, {articleId: params.id}, result);
-        array[+params.id - 1].comments.push(obj);
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        const obj = Object.assign({ id: array[+params.articleId - 1].comments.length + 1}, {articleId: params.articleId}, result);
+        array[+params.articleId - 1].comments.push(obj);
         writeToFile(array);
         res.end( JSON.stringify( obj ) );
     });
+}
+
+function deleteComment(req, res, params) {
+    res.statusCode = SERVER_SUCCESS;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    if(+params.articleId > array.length){
+        res.end(`There is no such article`);
+    } else if(+params.id > array[+params.articleId - 1].comments.length) {
+        res.end(`There is no such comment`);
+    } else {
+        array[+params.articleId - 1].comments = array[+params.articleId - 1].comments.filter(item => item.id !== +params.id).map((item, index) => item = {
+            id: index + 1,
+            articleId: +params.articleId,
+            text: item.text,
+            date: item.date,
+            author: item.author
+            });        
+        writeToFile(array);
+        res.end('Comment deleted');
+    }
 }
 
 function notFound(req, res) {
@@ -135,5 +154,6 @@ module.exports = {
     update,
     deleteArt,
     createComment,
+    deleteComment,
     notFound
 }

@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const { parseUrl, parseBodyJson } = require('./parsers');
-const { hello, readAll, read, create, update, deleteArt, createComment, notFound } = require('./controllers');
+const { hello, readAll, read, create, update, deleteArt, createComment, deleteComment, notFound } = require('./controllers');
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -14,6 +14,7 @@ const handlers = {
     '/articles/update': update,
     '/articles/delete': deleteArt,
     '/comments/create': createComment,
+    '/comments/delete': deleteComment
 };
 
 const server = http.createServer(handler);
