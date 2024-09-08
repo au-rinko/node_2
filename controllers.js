@@ -6,31 +6,6 @@ const SERVER_SUCCESS = 200;
 const jsonData = fs.readFileSync('articles.json', 'utf8');
 let array = JSON.parse(jsonData);
 
-function hello(req, res) {
-    res.statusCode = SERVER_SUCESS;
-    res.setHeader('Content-Type', 'text/html');
-    res.write('<h1>Hello</h1>');
-    res.write('<a href="/articles/readall">read articles</a>');
-    res.end();
-}
-
-function readAll(req, res) {
-    res.statusCode = SERVER_SUCCESS;
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    res.end(jsonData);
-}
-
-function read(req, res, params) {
-    res.statusCode = SERVER_SUCCESS;
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    const result = array.filter(item => item.id == params.id);
-    if(result.length !== 0) {
-        res.end(JSON.stringify(result));
-    } else {
-        res.end(`There is no such article`);
-    }
-}
-
 function create(req, res) {
     parseBodyJson(req, (err, result) => {
         if (err) {
@@ -135,11 +110,6 @@ function deleteComment(req, res, params) {
     }
 }
 
-function notFound(req, res) {
-    res.statusCode = 404;
-    res.end('Not found');
-}
-
 function writeToFile(data) {
     fs.writeFile('./articles.json', JSON.stringify(data), (err) => {
         if(err) console.log(err);
@@ -147,13 +117,9 @@ function writeToFile(data) {
 }
 
 module.exports = {
-    hello,
-    readAll,
-    read,
     create,
     update,
     deleteArt,
     createComment,
     deleteComment,
-    notFound
 }
