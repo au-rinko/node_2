@@ -1,8 +1,9 @@
 const http = require('http');
 const fs = require('fs');
-const { jsonData, array, hello, notFound, notAllowed, isBadRequest } = require('./common');
+const { jsonData, array, sayHello, notFound, notAllowed, isBadRequest, writeToFile } = require('./common');
 const { readAll, read } = require('./read');
-const { create, update, deleteArt, createComment, deleteComment } = require('./controllers');
+const { create, update, deleteArt } = require('./articles');
+const { createComment, deleteComment } = require('./comments');
 const { parseUrl, parseBodyJson } = require('./parsers');
 const { createLogs } = require('./logs');
 
@@ -10,7 +11,7 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 const handlers = {
-    '/': hello,
+    '/': sayHello,
     '/articles/readall': readAll,
     '/articles/read': read,
     '/articles/create': create,

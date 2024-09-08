@@ -8,7 +8,7 @@ const METHOD_NOT_ALLOWED = 405;
 const jsonData = fs.readFileSync('articles.json', 'utf8');
 let array = JSON.parse(jsonData);
 
-function hello(req, res) {
+function sayHello(req, res) {
     if (req.method === 'GET') {
         res.statusCode = SERVER_SUCCESS;
         res.setHeader('Content-Type', 'text/html');
@@ -42,11 +42,18 @@ function isBadRequest(req, res) {
     res.end(JSON.stringify(errorObj));
 }
 
+function writeToFile(data) {
+    fs.writeFile('./articles.json', JSON.stringify(data), (err) => {
+        if(err) console.log(err);
+    });
+}
+
 module.exports = {
     jsonData,
     array,
-    hello,
+    sayHello,
     notFound,
     notAllowed,
-    isBadRequest
+    isBadRequest,
+    writeToFile
 }
